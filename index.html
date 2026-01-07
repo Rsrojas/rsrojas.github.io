@@ -5,34 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sitio de Prueba - Analytics</title>
 
-    <!-- Bootstrap 5 -->
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Google Tag Manager -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8C4ZGLLRWB"></script>
     <script>
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-XXXXXXX');
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-8C4ZGLLRWB');
     </script>
 
     <style>
         body { min-height: 100vh; }
         .sidebar { width: 240px; }
         footer { background:#f8f9fa; padding:10px; text-align:center; }
+        iframe { border:0; }
     </style>
 </head>
 
 <body class="bg-light">
 
-<!-- GTM (noscript) -->
-<noscript>
-<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
-height="0" width="0" style="display:none;visibility:hidden"></iframe>
-</noscript>
-
-<!-- Navbar móvil -->
 <nav class="navbar navbar-dark bg-dark d-md-none">
     <div class="container-fluid">
         <span class="navbar-brand">Menú</span>
@@ -44,41 +38,61 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe>
 
 <div class="d-flex flex-column flex-md-row">
 
-    <!-- Sidebar -->
+    <!-- MENÚ -->
     <aside id="sidebar" class="sidebar bg-dark text-white p-3 collapse d-md-block">
-        <h5 class="text-center mb-4">Menú</h5>
+        <h5 class="text-center mb-4">Dashboards</h5>
+
         <div class="d-grid gap-2">
-            <button class="btn btn-outline-light" onclick="trackMenu('Menu 1')">Próximamente</button>
-            <button class="btn btn-outline-light" onclick="trackMenu('Menu 2')">Próximamente</button>
-            <button class="btn btn-outline-light" onclick="trackMenu('Menu 3')">Próximamente</button>
-            <button class="btn btn-outline-light" onclick="trackMenu('Menu 4')">Próximamente</button>
-            <button class="btn btn-outline-light" onclick="trackMenu('Menu 5')">Próximamente</button>
+            <button class="btn btn-outline-light"
+                onclick="navigateDashboard('general','menu_dashboard_general')">
+                Dashboard General
+            </button>
+
+            <button class="btn btn-outline-light"
+                onclick="navigateDashboard('eventos','menu_eventos')">
+                Eventos
+            </button>
+
+            <button class="btn btn-outline-light"
+                onclick="navigateDashboard('usuarios','menu_usuarios')">
+                Usuarios
+            </button>
+
+            <button class="btn btn-outline-light"
+                onclick="navigateDashboard('tiempo','menu_tiempo')">
+                Tiempo en Sitio
+            </button>
+
+            <button class="btn btn-outline-light"
+                onclick="navigateDashboard('conversiones','menu_conversiones')">
+                Conversiones
+            </button>
         </div>
     </aside>
 
-    <!-- Main -->
+    <!-- CONTENIDO -->
     <main class="flex-fill p-4">
         <div class="container">
 
-            <!-- Mensaje -->
             <div class="card shadow-sm mb-4">
                 <div class="card-body text-center">
                     <h1>Sitio de prueba</h1>
-                    <p>Ejemplo para Google Analytics, GTM y Looker Studio.</p>
+                    <p>Proyecto de Analytics con GA4 y Looker Studio.</p>
                 </div>
             </div>
 
-            <!-- Dashboard Looker -->
+            <!-- DASHBOARD -->
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h4 class="text-center mb-3">Dashboard de Analítica</h4>
-                    <iframe
-                        src="https://lookerstudio.google.com/embed/reporting/XXXXXXXX/page/XXXX"
+                    <h4 class="text-center mb-3">Dashboard</h4>
+
+                    <iframe id="dashboardFrame"
+                        src="https://lookerstudio.google.com/embed/reporting/REPORT_ID/page/GENERAL"
                         width="100%"
                         height="600"
-                        style="border:0"
                         allowfullscreen>
                     </iframe>
+
                 </div>
             </div>
 
@@ -93,12 +107,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    function trackMenu(menu) {
-        window.dataLayer = window.dataLayer || [];
-        dataLayer.push({
-            event: 'click_menu',
-            menu_name: menu
+    const dashboards = {
+        general: "https://lookerstudio.google.com/embed/reporting/REPORT_ID/page/GENERAL",
+        eventos: "https://lookerstudio.google.com/embed/reporting/REPORT_ID/page/EVENTOS",
+        usuarios: "https://lookerstudio.google.com/embed/reporting/REPORT_ID/page/USUARIOS",
+        tiempo: "https://lookerstudio.google.com/embed/reporting/REPORT_ID/page/TIEMPO",
+        conversiones: "https://lookerstudio.google.com/embed/reporting/REPORT_ID/page/CONVERSIONES"
+    };
+
+    function navigateDashboard(tipo, evento) {
+        // Evento GA4
+        gtag('event', evento, {
+            dashboard: tipo
         });
+
+        // Cambiar dashboard
+        document.getElementById('dashboardFrame').src = dashboards[tipo];
     }
 </script>
 
