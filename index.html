@@ -86,11 +86,13 @@
                 <div class="card-body">
                     <h4 class="text-center mb-3">Dashboard</h4>
 
-                    <iframe id="dashboardFrame"
-                        src="https://lookerstudio.google.com/embed/reporting/REPORT_ID/page/GENERAL"
+                    <iframe
+                        id="dashboardFrame"
+                        src="https://lookerstudio.google.com/embed/reporting/996a44d4-b154-48f1-80a4-2c3d296f7081/page/FWZkF"
                         width="100%"
-                        height="600"
-                        allowfullscreen>
+                        height="650"
+                        allowfullscreen
+                        sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">
                     </iframe>
 
                 </div>
@@ -108,20 +110,18 @@
 
 <script>
     const dashboards = {
-        general: "https://lookerstudio.google.com/embed/reporting/REPORT_ID/page/GENERAL",
-        eventos: "https://lookerstudio.google.com/embed/reporting/REPORT_ID/page/EVENTOS",
-        usuarios: "https://lookerstudio.google.com/embed/reporting/REPORT_ID/page/USUARIOS",
-        tiempo: "https://lookerstudio.google.com/embed/reporting/REPORT_ID/page/TIEMPO",
-        conversiones: "https://lookerstudio.google.com/embed/reporting/REPORT_ID/page/CONVERSIONES"
+        general: "https://lookerstudio.google.com/embed/reporting/996a44d4-b154-48f1-80a4-2c3d296f7081/page/FWZkF",
+        eventos: "https://lookerstudio.google.com/embed/reporting/996a44d4-b154-48f1-80a4-2c3d296f7081/page/EVENTOS_ID",
+        usuarios: "https://lookerstudio.google.com/embed/reporting/996a44d4-b154-48f1-80a4-2c3d296f7081/page/USUARIOS_ID",
+        tiempo: "https://lookerstudio.google.com/embed/reporting/996a44d4-b154-48f1-80a4-2c3d296f7081/page/TIEMPO_ID",
+        conversiones: "https://lookerstudio.google.com/embed/reporting/996a44d4-b154-48f1-80a4-2c3d296f7081/page/CONVERSIONES_ID"
     };
 
     function navigateDashboard(tipo, evento) {
-        // Evento GA4
         gtag('event', evento, {
             dashboard: tipo
         });
 
-        // Cambiar dashboard
         document.getElementById('dashboardFrame').src = dashboards[tipo];
     }
 </script>
