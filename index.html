@@ -1,131 +1,177 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sitio de Prueba - Analytics Looker studio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics Dashboard</title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8C4ZGLLRWB"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-8C4ZGLLRWB');
-    </script>
+<!-- GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8C4ZGLLRWB"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-8C4ZGLLRWB');
+</script>
 
-    <style>
-        body { min-height: 100vh; }
-        .sidebar { width: 240px; }
-        footer { background:#f8f9fa; padding:10px; text-align:center; }
-        iframe { border:0; }
-    </style>
+<style>
+body {
+    background: #f5f7fa;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont;
+}
+
+.sidebar {
+    width: 240px;
+    background: linear-gradient(180deg, #0f172a, #020617);
+}
+
+.sidebar h5 {
+    font-weight: 600;
+    letter-spacing: .4px;
+}
+
+.btn-menu {
+    color: #e5e7eb;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,.15);
+    padding: 12px 14px;
+    border-radius: 10px;
+    transition: all .25s ease;
+}
+
+.btn-menu:hover {
+    background: rgba(255,255,255,.12);
+    transform: translateX(6px);
+}
+
+.btn-menu.active {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    box-shadow: 0 8px 18px rgba(37,99,235,.35);
+    border: none;
+}
+
+.card {
+    border-radius: 16px;
+}
+
+iframe {
+    border-radius: 16px;
+}
+
+.loader {
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+footer {
+    font-size: .85rem;
+    color: #6b7280;
+}
+</style>
 </head>
 
-<body class="bg-light">
+<body>
 
 <nav class="navbar navbar-dark bg-dark d-md-none">
-    <div class="container-fluid">
-        <span class="navbar-brand">Menú</span>
-        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#sidebar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
+<div class="container-fluid">
+<span class="navbar-brand">Analytics</span>
+<button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#sidebar">
+<span class="navbar-toggler-icon"></span>
+</button>
+</div>
 </nav>
 
-<div class="d-flex flex-column flex-md-row">
+<div class="d-flex">
 
-    <!-- MENÚ -->
-    <aside id="sidebar" class="sidebar bg-dark text-white p-3 collapse d-md-block">
-        <h5 class="text-center mb-4">Dashboards</h5>
+<aside id="sidebar" class="sidebar text-white p-3 collapse d-md-block">
+<h5 class="text-center mb-4">Analytics</h5>
 
-        <div class="d-grid gap-2">
-            <button class="btn btn-outline-light"
-                onclick="navigateDashboard('general','menu_dashboard_general')">
-                Dashboard General
-            </button>
+<div class="d-grid gap-3">
+<button class="btn btn-menu active" onclick="loadDashboard('general','menu_dashboard_general',this)">
+Dashboard General
+</button>
+<button class="btn btn-menu" onclick="loadDashboard('eventos','menu_eventos',this)">
+Eventos
+</button>
+<button class="btn btn-menu" onclick="loadDashboard('usuarios','menu_usuarios',this)">
+Usuarios
+</button>
+<button class="btn btn-menu" onclick="loadDashboard('tiempo','menu_tiempo',this)">
+Tiempo
+</button>
+<button class="btn btn-menu" onclick="loadDashboard('conversiones','menu_conversiones',this)">
+Conversiones
+</button>
+</div>
+</aside>
 
-            <button class="btn btn-outline-light"
-                onclick="navigateDashboard('eventos','menu_eventos')">
-                Eventos
-            </button>
+<main class="flex-fill p-4 position-relative">
 
-            <button class="btn btn-outline-light"
-                onclick="navigateDashboard('usuarios','menu_usuarios')">
-                Usuarios
-            </button>
-
-            <button class="btn btn-outline-light"
-                onclick="navigateDashboard('tiempo','menu_tiempo')">
-                Tiempo en Sitio
-            </button>
-
-            <button class="btn btn-outline-light"
-                onclick="navigateDashboard('conversiones','menu_conversiones')">
-                Conversiones
-            </button>
-        </div>
-    </aside>
-
-    <!-- CONTENIDO -->
-    <main class="flex-fill p-4">
-        <div class="container">
-
-            <div class="card shadow-sm mb-4">
-                <div class="card-body text-center">
-                    <h1>Sitio de prueba</h1>
-                    <p>Proyecto de Analytics con GA4 y Looker Studio.</p>
-                </div>
-            </div>
-
-            <!-- DASHBOARD -->
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h4 class="text-center mb-3">Dashboard</h4>
-
-                    <iframe
-                        id="dashboardFrame"
-                        src="https://lookerstudio.google.com/embed/reporting/996a44d4-b154-48f1-80a4-2c3d296f7081/page/FWZkF"
-                        width="100%"
-                        height="650"
-                        allowfullscreen
-                        sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">
-                    </iframe>
-
-                </div>
-            </div>
-
-        </div>
-    </main>
+<div class="card shadow-sm mb-4 text-center">
+<div class="card-body">
+<h1 class="fw-semibold mb-1">Proyecto de Analítica Digital</h1>
+<p class="text-muted mb-0">
+GA4 · Looker Studio · GitHub Pages
+</p>
+</div>
 </div>
 
-<footer>
-    Derechos reservados
+<div class="card shadow-sm position-relative">
+<div class="loader" id="loader">
+<div class="spinner-border text-primary"></div>
+</div>
+
+<div class="card-body p-2">
+<iframe id="dashboard"
+src="https://lookerstudio.google.com/embed/reporting/996a44d4-b154-48f1-80a4-2c3d296f7081/page/FWZkF"
+width="100%"
+height="680"
+allowfullscreen
+sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">
+</iframe>
+</div>
+</div>
+
+</main>
+</div>
+
+<footer class="text-center py-2">
+© 2026 – Analytics Demo
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    const dashboards = {
-        general: "https://lookerstudio.google.com/embed/reporting/996a44d4-b154-48f1-80a4-2c3d296f7081/page/FWZkF",
-        eventos: "https://lookerstudio.google.com/embed/reporting/996a44d4-b154-48f1-80a4-2c3d296f7081/page/EVENTOS_ID",
-        usuarios: "https://lookerstudio.google.com/embed/reporting/996a44d4-b154-48f1-80a4-2c3d296f7081/page/USUARIOS_ID",
-        tiempo: "https://lookerstudio.google.com/embed/reporting/996a44d4-b154-48f1-80a4-2c3d296f7081/page/TIEMPO_ID",
-        conversiones: "https://lookerstudio.google.com/embed/reporting/996a44d4-b154-48f1-80a4-2c3d296f7081/page/CONVERSIONES_ID"
-    };
+const dashboards = {
+general: "https://lookerstudio.google.com/embed/reporting/996a44d4-b154-48f1-80a4-2c3d296f7081/page/FWZkF",
+eventos: "PAGE_EVENTOS",
+usuarios: "PAGE_USUARIOS",
+tiempo: "PAGE_TIEMPO",
+conversiones: "PAGE_CONVERSIONES"
+};
 
-    function navigateDashboard(tipo, evento) {
-        gtag('event', evento, {
-            dashboard: tipo
-        });
+function loadDashboard(type, eventName, btn) {
+document.getElementById('loader').style.display = 'flex';
 
-        document.getElementById('dashboardFrame').src = dashboards[tipo];
-    }
+gtag('event', eventName, { dashboard: type });
+
+document.getElementById('dashboard').src = dashboards[type];
+
+document.querySelectorAll('.btn-menu').forEach(b => b.classList.remove('active'));
+btn.classList.add('active');
+}
+
+document.getElementById('dashboard').onload = () => {
+document.getElementById('loader').style.display = 'none';
+};
 </script>
 
 </body>
 </html>
-
